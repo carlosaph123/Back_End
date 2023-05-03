@@ -33,10 +33,20 @@ public class CategoryControllerImpl implements CategoryController {
     @Override
     public ResponseEntity<List<Category>> getAllCategory(String filterValue) {
         try{
-            categoryService.getAllCategory(filterValue);
+            return categoryService.getAllCategory(filterValue);
         }catch (Exception ex){
             ex.printStackTrace();
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> updateCategory(Map<String, String> requestMap) {
+        try{
+            return categoryService.updateCategory(requestMap);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return JoyeriaUtils.getResponseEntity(JoyeriaConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

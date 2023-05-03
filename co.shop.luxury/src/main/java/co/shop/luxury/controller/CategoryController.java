@@ -14,6 +14,9 @@ public interface CategoryController {
     ResponseEntity<String> addNewCategory(@RequestBody Map<String, String> requestMap);
 
     @GetMapping(path = "/get")
-    ResponseEntity<List<Category>> getAllCategory(@RequestParam (required = false) String filterValue);
+    ResponseEntity<List<Category>> getAllCategory(@RequestParam (required=false) String filterValue);
+
+    @PostMapping(path = "/update")
+    ResponseEntity<String> updateCategory(@RequestBody Map<String, String> requestMap);
 
 }
