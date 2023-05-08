@@ -53,9 +53,9 @@ public class UserServiceImpl implements UserService {
 
                 if (Objects.isNull(userEmail) &&  !userRepository.existsById(userId.getId())) {
                     userRepository.save(getUserFromMap(requestMap));
-                    return JoyeriaUtils.getResponseEntity("Successfully Registered", HttpStatus.OK);
+                    return JoyeriaUtils.getResponseEntity("Registro Exitoso", HttpStatus.OK);
                 } else {
-                    return JoyeriaUtils.getResponseEntity("Email or Id already exist", HttpStatus.BAD_REQUEST);
+                    return JoyeriaUtils.getResponseEntity("Correo electrónico o identificación ya existe", HttpStatus.BAD_REQUEST);
                 }
             } else {
                 return JoyeriaUtils.getResponseEntity(JoyeriaConstant.INVALID_DATA, HttpStatus.BAD_REQUEST);
@@ -103,13 +103,13 @@ public class UserServiceImpl implements UserService {
                             HttpStatus.OK);
                 }
                 else{
-                    return new ResponseEntity<>("{\"message\":\""+"Wait for admin approval"+"\"}", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>("{\"message\":\""+"En espera de autorización por parte del Administrador"+"\"}", HttpStatus.BAD_REQUEST);
                                     }
             }
         }catch (Exception ex){
             log.error("{}", ex);
         }
-        return new ResponseEntity<>("{\"message\":\""+"Bad Credentials"+"\"}", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("{\"message\":\""+"Usuario o contraseña incorrectos"+"\"}", HttpStatus.BAD_REQUEST);
     }
 
     @Override
@@ -147,6 +147,11 @@ public class UserServiceImpl implements UserService {
             ex.printStackTrace();
         }
         return JoyeriaUtils.getResponseEntity(JoyeriaConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> checkToken() {
+        return JoyeriaUtils.getResponseEntity("true", HttpStatus.OK);
     }
 
     private void sendMailToAllAdmin(String status, String user, List<String> allAdmin) {

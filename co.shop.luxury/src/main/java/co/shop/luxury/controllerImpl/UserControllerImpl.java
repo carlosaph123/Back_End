@@ -62,5 +62,15 @@ public class UserControllerImpl implements UserController {
         return JoyeriaUtils.getResponseEntity(JoyeriaConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Override
+    public ResponseEntity<String> checkToken() {
+        try{
+            return userService.checkToken();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return JoyeriaUtils.getResponseEntity(JoyeriaConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
 }
