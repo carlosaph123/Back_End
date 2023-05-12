@@ -8,12 +8,15 @@ import co.shop.luxury.repository.CategoryRepository;
 import co.shop.luxury.repository.ProductRepository;
 import co.shop.luxury.service.ProductService;
 import co.shop.luxury.utils.JoyeriaUtils;
+import co.shop.luxury.wrapper.ProductWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -46,6 +49,7 @@ public class ProductServiceImpl implements ProductService {
         return JoyeriaUtils.getResponseEntity(JoyeriaConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+
     private Product getProductFromMap(Map<String, String> requestMap, boolean isAdd) {
         Category category = new Category();
         category.setId(Integer.parseInt(requestMap.get("categoryId")));
@@ -73,5 +77,16 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         return false;
+    }
+
+
+    @Override
+    public ResponseEntity<List<ProductWrapper>> getAllProducts() {
+        try{
+            return new ResponseEntity<>(productRepository.getAllProducts(), HttpStatus.OK);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

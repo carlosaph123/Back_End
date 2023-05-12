@@ -134,9 +134,9 @@ public class UserServiceImpl implements UserService {
                 if(!optional.isEmpty()){
                     userRepository.updateStatus(requestMap.get("status"), Integer.parseInt(requestMap.get("id")) );
                     //sendMailToAllAdmin(requestMap.get("status"), optional.get().getEmail(), userRepository.getAllAdmin());
-                    return JoyeriaUtils.getResponseEntity("User Status updated Successfully", HttpStatus.OK);
+                    return JoyeriaUtils.getResponseEntity("Actualización exitosa", HttpStatus.OK);
                 }else{
-                    return JoyeriaUtils.getResponseEntity("User id doesn´t exist", HttpStatus.OK);
+                    return JoyeriaUtils.getResponseEntity("Usuario no existe", HttpStatus.OK);
 
                 }
             }else{
