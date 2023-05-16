@@ -1,5 +1,6 @@
 package co.shop.luxury.controller;
 
+import co.shop.luxury.model.Product;
 import co.shop.luxury.wrapper.ProductWrapper;
 import com.sun.mail.iap.Response;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,10 @@ public interface ProductController {
     @PostMapping(path = "/updateStatus")
     ResponseEntity<String> updateStatus (@RequestBody Map<String, String> requestMap);
 
+    @GetMapping(path = "/getByCategory/{id}")
+    ResponseEntity<List<ProductWrapper>> getByCategory(@PathVariable Integer id);
+
+    @GetMapping(path = "/getById/{id}")
+    ResponseEntity<ProductWrapper> getProductById (@PathVariable Integer id);
 
 }
