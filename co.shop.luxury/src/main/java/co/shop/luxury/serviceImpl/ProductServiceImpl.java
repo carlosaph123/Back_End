@@ -15,9 +15,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.xml.catalog.CatalogFeatures;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -88,5 +90,71 @@ public class ProductServiceImpl implements ProductService {
             ex.printStackTrace();
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> updateProduct(Map<String, String> requestMap) {
+        try{
+            if(jwtFilter.isAdmin()){
+                if(validateProductMap(requestMap, true)){
+                    Optional<Product> optional= productRepository.findById(Integer.parseInt(requestMap.get("id")));
+                    if(!optional.isEmpty()){
+                        Product product = getProductFromMap(requestMap, true);
+                        product.setStatus(optional.get().getStatus());
+                        productRepository.save(product);
+                        return JoyeriaUtils.getResponseEntity("Producto actualizado correctamente", HttpStatus.OK);
+                    }else{
+                        return JoyeriaUtils.getResponseEntity("Producto no existe", HttpStatus.OK);
+                    }
+                }else{
+                    return JoyeriaUtils.getResponseEntity(JoyeriaConstant.INVALID_DATA, HttpStatus.BAD_REQUEST);
+                }
+            }else{
+                return JoyeriaUtils.getResponseEntity(JoyeriaConstant.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return JoyeriaUtils.getResponseEntity(JoyeriaConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> deleteProduct(Integer id) {
+        try{
+            if(jwtFilter.isAdmin()){
+                Optional <Product> optional = productRepository.findById(id);
+                if(!optional.isEmpty()){
+                    productRepository.deleteById(id);
+                    return JoyeriaUtils.getResponseEntity("Producto eliminado correctamente", HttpStatus.OK);
+                }else{
+                    return JoyeriaUtils.getResponseEntity("Producto no existe", HttpStatus.OK);
+                }
+            }else{
+                return JoyeriaUtils.getResponseEntity(JoyeriaConstant.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return JoyeriaUtils.getResponseEntity(JoyeriaConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> updateStatus(Map<String, String> requestMap) {
+        try{
+            if(jwtFilter.isAdmin()){
+                Optional <Product> optional = productRepository.findById(Integer.parseInt(requestMap.get("id")));
+                if(!optional.isEmpty()){
+                    productRepository.updateProductStatus(requestMap.get("status"), Integer.parseInt(requestMap.get("id")));
+                    return JoyeriaUtils.getResponseEntity("Estado del producto actualizado correctamente", HttpStatus.OK);
+                }else{
+                    return JoyeriaUtils.getResponseEntity("Producto no existe", HttpStatus.OK);
+                }
+            }else{
+                return JoyeriaUtils.getResponseEntity(JoyeriaConstant.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return JoyeriaUtils.getResponseEntity(JoyeriaConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
