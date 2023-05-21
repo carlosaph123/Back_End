@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "orders")
+@Table(name = "orders   ")
 
 public class Order implements Serializable {
 

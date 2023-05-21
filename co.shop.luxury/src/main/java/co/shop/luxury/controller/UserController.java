@@ -28,5 +28,8 @@ public interface UserController {
     @GetMapping (path = "/checkToken")
     ResponseEntity<String> checkToken();
 
+    //@PostMapping (path = "/changePassword")
+    //ResponseEntity<String> changePassword(@RequestBody Map<String, String> requestMap);
+
 
 }
