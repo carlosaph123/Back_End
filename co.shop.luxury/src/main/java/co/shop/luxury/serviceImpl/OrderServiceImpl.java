@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -85,6 +87,17 @@ public class OrderServiceImpl implements OrderService {
             ex.printStackTrace();
         }
         return JoyeriaUtils.getResponseEntity(JoyeriaConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<List<Order>> getOrders() {
+        List<Order> list =  new ArrayList<>();
+        if(jwtFilter.isAdmin()){
+            list = orderRepository.getAllOrders();
+        }else{
+            list = orderRepository.getOrderByUsername(jwtFilter.getCurrentUser());
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     private void addRow(PdfPTable table, Map<String, Object> data) {

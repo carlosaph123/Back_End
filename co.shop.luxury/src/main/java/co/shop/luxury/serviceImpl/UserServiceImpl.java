@@ -154,6 +154,26 @@ public class UserServiceImpl implements UserService {
         return JoyeriaUtils.getResponseEntity("true", HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
+        try{
+            User user = userRepository.findByEmailId(jwtFilter.getCurrentUser());
+            if(!user.equals(null)){
+                if(user.getPassword().equals(requestMap.get("oldPassword"))){
+                    user.setPassword(requestMap.get("newPassword"));
+                    userRepository.save(user);
+                    return JoyeriaUtils.getResponseEntity("Contraseña actualizada correctamente", HttpStatus.OK);
+                }else{
+                    return JoyeriaUtils.getResponseEntity("Contraseña actual es incorrecta", HttpStatus.BAD_REQUEST);
+                }
+            }
+            return JoyeriaUtils.getResponseEntity("Usuario no existe", HttpStatus.OK);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return JoyeriaUtils.getResponseEntity(JoyeriaConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     private void sendMailToAllAdmin(String status, String user, List<String> allAdmin) {
         allAdmin.remove(jwtFilter.getCurrentUser());
         if(status != null && status.equalsIgnoreCase("true")){

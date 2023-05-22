@@ -3,9 +3,12 @@ package co.shop.luxury.model;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
 import java.io.Serializable;
+
+
+@NamedQuery(name="Order.getAllOrders", query = "select o from Order o order by o.id desc")
+@NamedQuery(name="Order.getOrderByUsername", query = "select o from Order o where o.createdBy=:username order by o.id desc")
 
 @Data
 @Entity
